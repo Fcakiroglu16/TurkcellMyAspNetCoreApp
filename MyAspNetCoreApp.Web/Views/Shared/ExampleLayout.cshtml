@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - www.mysite.com</title>
+ 
+</head>
+<body>
+    <header>
+       <div>header</div>
+        @await RenderSectionAsync("header", required: false)
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+       <div>footer</div>
+          @await RenderSectionAsync("footer", required: false)
+    </footer>
+   
+</body>
+</html>

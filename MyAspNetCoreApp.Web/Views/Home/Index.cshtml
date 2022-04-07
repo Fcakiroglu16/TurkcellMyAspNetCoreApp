@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+    var alert = "bu bir uyarı mesajıdır.";
+}
+@section Css
+{
+<link rel="stylesheet" href="~/css/example.css" asp-append-version="true" />
+
+
+<style>
+
+    h1
+    {
+        color:red;
+        background-color:blue;
+    }
+
+</style>
+
+}
+@section Scripts
+{
+    <script type="text/javascript">
+    //alert("Sayfamıza hoş geldin.")  
+        $(document).ready(function(){
+
+            console.log("Sayfamıza hoş geldin");
+
+        })
+    
+    </script>
+
+
+}
+
+<h1>Merhaba Dünya</h1>
+<hr />
+<h2>Merhaba Asp.Net</h2>
+
+
+
+
+@*<partial name="_MenuPartialView"></partial>
+@await Html.PartialAsync("_MenuPartialView")
+@Html.Partial("_MenuPartialView")*@
+
+
+
+
+
