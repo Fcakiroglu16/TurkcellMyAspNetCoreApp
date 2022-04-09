@@ -4,6 +4,17 @@
 }
 @model List<Product>
 <h1>Ürünler</h1>
+
+
+@if(TempData["status"]!=null)
+{
+   <div class="alert alert-primary" role="alert">
+@TempData["status"]
+</div>
+}
+
+
+
 <a asp-controller="products" asp-action="add">  Ürün ekle</a>
 <table class="table">
     <thead>
@@ -12,7 +23,10 @@
         <th>İsim</th>
         <th>Fiyat</th>
         <th>Stok</th>
-        <th>İşlem</th>
+        <th>Renk</th>
+         <th>Yayınlansın mı ?</th>
+            <th>Süre(Ay)</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +37,12 @@
               <td>@item.Name</td>
                 <td>@item.Price</td>
                   <td>@item.Stock</td>
+                  <td>@item.Color</td>
+                  <td>
+                   @(item.IsPublish ? "Evet" : "Hayır")
+
+                  </td>
+                  <td>@item.Expire</td>
                   <td>
                       <a asp-controller="products" asp-action="remove" asp-route-id="@item.Id">Sil</a>
                       
