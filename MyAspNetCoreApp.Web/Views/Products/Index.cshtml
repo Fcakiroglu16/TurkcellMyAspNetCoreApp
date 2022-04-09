@@ -26,6 +26,7 @@
         <th>Renk</th>
          <th>Yayınlansın mı ?</th>
             <th>Süre(Ay)</th>
+            <th>Açıklama</th>
             <th></th>
         </tr>
     </thead>
@@ -43,6 +44,17 @@
 
                   </td>
                   <td>@item.Expire</td>
+                  <td>@if(item.Description.Length>20)
+                    {
+                        
+                        @item.Description.Substring(0,20)<text>...</text>
+
+                    }
+                    else
+                    {
+                       @item.Description
+                    }
+                </td>
                   <td>
                       <a asp-controller="products" asp-action="remove" asp-route-id="@item.Id">Sil</a>
                       

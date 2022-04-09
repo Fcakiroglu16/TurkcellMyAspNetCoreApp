@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyAspNetCoreApp.Web.Helpers;
 using MyAspNetCoreApp.Web.Models;
 
@@ -53,8 +54,6 @@ namespace MyAspNetCoreApp.Web.Controllers
         public IActionResult Add()
         {
 
-         
-
             ViewBag.Expire = new Dictionary<string, int>()
             {
                 { "1 Ay",1 },
@@ -62,6 +61,15 @@ namespace MyAspNetCoreApp.Web.Controllers
                  { "6 Ay",6 },
                  { "12 Ay",12 }
             };
+
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>() {
+
+                new(){ Data="Mavi" ,Value="Mavi" },
+                  new(){ Data="Kırmızı" ,Value="Kırmızı" },
+                    new(){ Data="Sarı" ,Value="Sarı" }
+
+
+            }, "Value", "Data");
 
 
 
@@ -85,6 +93,38 @@ namespace MyAspNetCoreApp.Web.Controllers
         {
 
             var product = _context.Products.Find(id);
+
+
+            ViewBag.ExpireValue = product.Expire;
+            ViewBag.Expire = new Dictionary<string, int>()
+            {
+                { "1 Ay",1 },
+                 { "3 Ay",3 },
+                 { "6 Ay",6 },
+                 { "12 Ay",12 }
+            };
+
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>() {
+
+                new(){ Data="Mavi" ,Value="Mavi" },
+                  new(){ Data="Kırmızı" ,Value="Kırmızı" },
+                    new(){ Data="Sarı" ,Value="Sarı" }
+
+
+            }, "Value", "Data",product.Color);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             return View(product);
         }

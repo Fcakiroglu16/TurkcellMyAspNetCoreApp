@@ -8,7 +8,7 @@
 <h1>Ürün ekleme</h1>
 <form  asp-controller="Products" asp-action="Add" method="post">
 
-     <div class="mb-3">
+  <div class="mb-3">
     <label asp-for="Name" class="form-label">Ürün ismi :</label>
    
     <input  class="form-control"   asp-for="Name">
@@ -24,14 +24,19 @@
   </div>
 
 
-      <div class="mb-3">
-    <label asp-for=Color class="form-label">Ürün renk :</label>
-    <input type=""  class="form-control"   asp-for="Color">
+  <div class="mb-3">
+  @*  <label asp-for=Color class="form-label">Ürün renk :</label>
+    <input type=""  class="form-control"   asp-for="Color">*@
+
+    <select class="form-select"  asp-for="Color" asp-items="@ViewBag.ColorSelect">
+       <option value="">Renk seçiniz</option>
+
+    </select>
   </div>
 
 
   <div class="form-check">
-  <input   class="form-check-input"  asp-for="IsPublish">
+  <input    class="form-check-input"  asp-for="IsPublish">
   <label class="form-check-label"  asp-for="IsPublish">
     Yayınlansın mı ?
   </label>
@@ -45,7 +50,7 @@
   @foreach (var item in ViewBag.Expire as Dictionary<string, int>)
   {
       <div class="form-check">
-  <input class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
+  <input  class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
     <label class="form-check-label"  asp-for="Expire" for="@(item.Value)Expire">
     @item.Key
     </label>
@@ -53,6 +58,17 @@
   }
   </div>
 
+  <div class="form-floating mb-3">
+  <textarea asp-for="Description" class="form-control" placeholder="ürün açıklama" style="height: 100px"></textarea>
+  <label asp-for="Description">ürün açıklama</label>
+</div>
+
+
+ <div class="mb-3">
+    <label asp-for="PublishDate" class="form-label">Ürün yayınlanma tarih :</label>
+   
+    <input  class="form-control"   asp-for="PublishDate">
+  </div>
 
 
 <button class="btn btn-primary" type="submit">Ürün Kaydet</button>
