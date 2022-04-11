@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add";
 
 }
-@model Product
+@model ProductViewModel
   
 <h1>Ürün ekleme</h1>
 <form  asp-controller="Products" asp-action="Add" method="post">
@@ -12,15 +12,18 @@
     <label asp-for="Name" class="form-label">Ürün ismi :</label>
    
     <input  class="form-control"   asp-for="Name">
+    <span class="text-danger" asp-validation-for="Name"></span>
   </div>
 
       <div class="mb-3">
     <label asp-for="Price" class="form-label">Ürün fiyat :</label>
     <input  class="form-control"   asp-for="Price">
+      <span class="text-danger" asp-validation-for="Price"></span>
   </div>
       <div class="mb-3">
     <label asp-for="Stock" class="form-label">Ürün stok :</label>
     <input type=""  class="form-control"   asp-for="Stock">
+      <span class="text-danger" asp-validation-for="Stock"></span>
   </div>
 
 
@@ -61,6 +64,7 @@
   <div class="form-floating mb-3">
   <textarea asp-for="Description" class="form-control" placeholder="ürün açıklama" style="height: 100px"></textarea>
   <label asp-for="Description">ürün açıklama</label>
+    <span class="text-danger" asp-validation-for="Description"></span>
 </div>
 
 

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyAspNetCoreApp.Web.Helpers;
 using MyAspNetCoreApp.Web.Models;
+using MyAspNetCoreApp.Web.ViewModels;
 
 namespace MyAspNetCoreApp.Web.Controllers
 {
@@ -10,21 +12,17 @@ namespace MyAspNetCoreApp.Web.Controllers
 
         private AppDbContext _context;
 
-       
 
+        private readonly IMapper _mapper;
         private readonly ProductRepository _productRepository;
-        public ProductsController(AppDbContext context)
+        public ProductsController(AppDbContext context, IMapper mapper)
         {
 
-          
-            _productRepository =new  ProductRepository();
-         
+
+            _productRepository = new ProductRepository();
+
             _context = context;
-
-           
-         
-
-
+            _mapper = mapper;
         }
 
 
@@ -34,10 +32,7 @@ namespace MyAspNetCoreApp.Web.Controllers
         
 
             var products = _context.Products.ToList();
-
-          
-       
-            return View(products);
+            return View(_mapper.Map<List<ProductViewModel>>(products));
         }
 
         public IActionResult Remove(int id)
@@ -78,14 +73,48 @@ namespace MyAspNetCoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product newProduct)
+        public IActionResult Add(ProductViewModel newProduct)
         {
 
-            _context.Products.Add(newProduct);
-            _context.SaveChanges();
+            if(ModelState.IsValid)
+            {
+                _context.Products.Add(_mapper.Map<Product>(newProduct));
+                _context.SaveChanges();
 
-            TempData["status"] = "Ürün başarıyla eklendi.";
-            return RedirectToAction("Index");
+                TempData["status"] = "Ürün başarıyla eklendi.";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                ViewBag.Expire = new Dictionary<string, int>()
+            {
+                { "1 Ay",1 },
+                 { "3 Ay",3 },
+                 { "6 Ay",6 },
+                 { "12 Ay",12 }
+            };
+
+                ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>() {
+
+                new(){ Data="Mavi" ,Value="Mavi" },
+                  new(){ Data="Kırmızı" ,Value="Kırmızı" },
+                    new(){ Data="Sarı" ,Value="Sarı" }
+
+
+            }, "Value", "Data");
+
+
+
+
+                return View();
+
+
+            }
+
+
+
+          
         }
 
         [HttpGet]
