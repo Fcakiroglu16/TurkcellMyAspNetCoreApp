@@ -6,6 +6,13 @@
 @model ProductViewModel
   
 <h1>Ürün ekleme</h1>
+
+<div asp-validation-summary="ModelOnly">
+
+</div>
+
+
+
 <form  asp-controller="Products" asp-action="Add" method="post">
 
   <div class="mb-3">
@@ -22,7 +29,7 @@
   </div>
       <div class="mb-3">
     <label asp-for="Stock" class="form-label">Ürün stok :</label>
-    <input type=""  class="form-control"   asp-for="Stock">
+    <input type="number"  class="form-control"   asp-for="Stock">
       <span class="text-danger" asp-validation-for="Stock"></span>
   </div>
 
@@ -35,6 +42,8 @@
        <option value="">Renk seçiniz</option>
 
     </select>
+
+       <span class="text-danger" asp-validation-for="Color"></span>
   </div>
 
 
@@ -59,6 +68,7 @@
     </label>
 </div>
   }
+     <span class="text-danger" asp-validation-for="Expire"></span>
   </div>
 
   <div class="form-floating mb-3">
@@ -72,12 +82,29 @@
     <label asp-for="PublishDate" class="form-label">Ürün yayınlanma tarih :</label>
    
     <input  class="form-control"   asp-for="PublishDate">
+       <span class="text-danger" asp-validation-for="PublishDate"></span>
   </div>
 
 
 <button class="btn btn-primary" type="submit">Ürün Kaydet</button>
 
 </form>
+
+
+@section Scripts
+{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+}
+
+
+
+
+
 
 
 
