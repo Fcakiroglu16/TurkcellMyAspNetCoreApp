@@ -1,0 +1,33 @@
+﻿@model List<ProductListComponentViewModel>
+
+
+    <a class="btn btn-outline-primary" asp-controller="products" asp-action="index" >Ürünlere git</a>
+
+    <table class="table table-hover">
+
+    <thead>
+        <tr>
+          
+            <th>İsim</th>
+            <th>Açıklama</th>
+         
+        </tr>
+
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+                 <tr>
+
+                    
+                     <td>@item.Name</td>
+                     <td>@item.Description</td>
+                    
+                 </tr> 
+        }
+ 
+    </tbody>
+
+
+</table>

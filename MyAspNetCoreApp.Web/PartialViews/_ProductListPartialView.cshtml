@@ -1,0 +1,40 @@
+﻿@using MyAspNetCoreApp.Web.ViewModels
+
+@model ProductListPartialViewModel
+
+
+<table class="table table-success table-striped">
+
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>İsim</th>
+            <th>Fiyat</th>
+            <th>Stock</th>
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        @foreach (var item in Model.Products)
+        {
+                 <tr>
+
+                     <td>@item.Id</td>
+                     <td>@item.Name</td>
+                     <td>@item.Price</td>
+                     <td>@item.Stock</td>
+                 </tr> 
+        }
+  
+
+
+
+
+
+    </tbody>
+
+
+</table>

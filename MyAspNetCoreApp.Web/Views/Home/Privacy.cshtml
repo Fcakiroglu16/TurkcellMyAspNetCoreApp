@@ -3,5 +3,19 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
-<partial name="_MenuPartialView"></partial>
+<div class="row">
+    <div class="col-md-4">
+        <partial name="~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag.productListPartialViewModel" />
+   
+    </div>
+    <div class="col-md-4">
+
+        @*@await Component.InvokeAsync("ProductList",new{ type=2})*@
+
+        <vc:product-list type=2></vc:product-list>
+
+      
+        
+    </div>
+
+</div>

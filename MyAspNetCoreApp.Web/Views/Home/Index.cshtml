@@ -1,49 +1,67 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 
-    var alert = "bu bir uyarı mesajıdır.";
+    var product = new Product() { Id = 1, Name = "Kalem 1", Price = 100, Stock = 200 };
 }
 @section Css
 {
-<link rel="stylesheet" href="~/css/example.css" asp-append-version="true" />
-
 
 <style>
-
-    h1
-    {
-        color:red;
-        background-color:blue;
-    }
 
 </style>
 
 }
 @section Scripts
 {
-    <script type="text/javascript">
-    //alert("Sayfamıza hoş geldin.")  
-        $(document).ready(function(){
-
-            console.log("Sayfamıza hoş geldin");
-
-        })
-    
-    </script>
+  
 
 
 }
+<div class="row">
+    <div class="col-md-4">
+        <partial name="~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag.productListPartialViewModel" />
 
-<h1>Merhaba Dünya</h1>
-<hr />
-<h2>Merhaba Asp.Net</h2>
+    </div>
+
+    <div class="col-md-4">
+
+        @*1.yol*@
+       @* @await Component.InvokeAsync("ProductList",new {type=1})*@
+
+      @* 2.yol*@
+       <vc:product-list type=1></vc:product-list>
+       
+        
+    </div>
+
+    <div class="col-md-4">
+
+
+        <italic>Asp.Net Core</italic>
+        <product-show  product="@product"></product-show>
+
+
+      
+
+    </div>
+    
+   
+
+</div>
+
+
+<div>
+      <img src="/images/car.jpg" />
+      
+        <thumbnail  image-src="/images/car.jpg"></thumbnail>
+</div>
 
 
 
 
-@*<partial name="_MenuPartialView"></partial>
-@await Html.PartialAsync("_MenuPartialView")
-@Html.Partial("_MenuPartialView")*@
+
+
+
 
 
 
