@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyAspNetCoreApp.Web.Helpers;
 using MyAspNetCoreApp.Web.Models;
 using System.Reflection;
@@ -37,11 +37,37 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//baseUrl/�r�nler/kalem/1
+//blog/abc => blog controller > article action method çalışsın
+//blog/ddd =>blog controller > article action method çalışsın
+//app.MapControllerRoute(
+//    name: "pages",
+//    pattern: "blog/{*article}",
+//    defaults:new { controller="Blog", action ="Article"});
+
+
+//app.MapControllerRoute(
+//    name: "article",
+//    pattern: "{controller=Blog}/{action=Article}/{name}/{id}");
+
+
+//app.MapControllerRoute(
+//    name: "pages",
+//    pattern: "{controller}/{action}/{page}/{pagesize}");
+
+
+//app.MapControllerRoute(
+//    name: "getbyid",
+//    pattern: "{controller}/{action}/{productid}");
+
+app.MapControllers();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+//baseUrl/ürünler/kalem/1
 // baseUrl/home/index
 //baseUrl/home/privacy
 

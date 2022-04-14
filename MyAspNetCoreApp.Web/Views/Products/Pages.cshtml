@@ -1,21 +1,16 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pages";
 }
 @model List<ProductViewModel>
-<h1>Ürünler</h1>
-
-
-@if(TempData["status"]!=null)
-{
-   <div class="alert alert-primary" role="alert">
-@TempData["status"]
-</div>
-}
+<h1>Pages</h1>
+<h2>page : @ViewBag.page</h2>
+<h2>pageSize : @ViewBag.pageSize</h2>
 
 
 
-<a asp-controller="products" asp-action="add">  Ürün ekle</a>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -61,9 +56,9 @@
                                 <a asp-controller="products" asp-action="update" asp-route-id="@item.Id">Güncelle</a>   
                                 
 
-                                <a asp-route="product" asp-route-productid=@item.Id>Ürün sayfasına git</a>
+                                <a asp-controller="products"  asp-action="getbyid" asp-route-productid=@item.Id>Ürün sayfasına git</a>
 
-                              
+
 
                   </td>
         </tr>
@@ -72,13 +67,4 @@
 
 
 </table>
-
-
-<a asp-controller="blog" asp-action="article" asp-route-name="makale-ismi" asp-route-id=2>makaleye git</a>
-
-<a asp-route="productpage"  asp-route-page=1 asp-route-pagesize=3>1 sayfadan 3 ürün ver</a>
-<a asp-route="productpage" asp-route-page=2 asp-route-pagesize=3>2 sayfadan 3 ürün ver</a>
-
-
-
 

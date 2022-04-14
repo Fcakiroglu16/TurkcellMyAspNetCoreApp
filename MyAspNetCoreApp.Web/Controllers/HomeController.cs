@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 namespace MyAspNetCoreApp.Web.Controllers
 {
+
+   [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
     
@@ -24,6 +26,9 @@ namespace MyAspNetCoreApp.Web.Controllers
             _mapper = mapper;
         }
 
+        [Route("")]
+        [Route("Home")]
+        [Route("Home/Index")]
         public IActionResult Index()
         {
 
