@@ -2,7 +2,7 @@
 
 namespace MyAspNetCoreApp.Web.Controllers
 {
-
+    
     //blog/article/makele-ismi/id
     public class BlogController : Controller
     {

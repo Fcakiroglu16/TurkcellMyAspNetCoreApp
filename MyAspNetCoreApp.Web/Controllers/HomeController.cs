@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MyAspNetCoreApp.Web.Filters;
 using MyAspNetCoreApp.Web.Helpers;
 using MyAspNetCoreApp.Web.Models;
 using MyAspNetCoreApp.Web.ViewModels;
@@ -8,6 +9,9 @@ using System.Diagnostics;
 namespace MyAspNetCoreApp.Web.Controllers
 {
 
+
+
+   [LogFilter]
    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
@@ -26,9 +30,9 @@ namespace MyAspNetCoreApp.Web.Controllers
             _mapper = mapper;
         }
 
-        [Route("")]
-        [Route("Home")]
-        [Route("Home/Index")]
+        [Route("/")]
+        [Route("/Home")]
+        [Route("/Home/Index")]
         public IActionResult Index()
         {
 
@@ -49,9 +53,13 @@ namespace MyAspNetCoreApp.Web.Controllers
 
             return View();
         }
-
+        [CustomExceptionFilter]
         public IActionResult Privacy()
         {
+
+
+            throw new Exception("Veritabanı ile ilgili bir hata meydana geldi");
+
             var products = _context.Products.OrderByDescending(x => x.Id).Select(x => new ProductPartialViewModel()
             {
                 Id = x.Id,
@@ -71,9 +79,13 @@ namespace MyAspNetCoreApp.Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(ErrorViewModel errorViewModel)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            errorViewModel.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+
+
+            return View(errorViewModel);
         }
 
         public IActionResult Visitor()
