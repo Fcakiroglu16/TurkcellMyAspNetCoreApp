@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyAspNetCoreApp.Web.ViewModels
@@ -35,7 +36,7 @@ namespace MyAspNetCoreApp.Web.ViewModels
         public string Description { get; set; }
 
 
-        [Required(ErrorMessage = "Renk seçimi boş olamaz.")]
+        [Required(ErrorMessage = "Renk seçiniz")]
         public string? Color { get; set; }
 
 
@@ -47,6 +48,19 @@ namespace MyAspNetCoreApp.Web.ViewModels
         [Required(ErrorMessage = "Yayınlanma süresi boş olamaz.")]
         public int? Expire { get; set; }
 
-      
+        [ValidateNever]
+        public IFormFile? Image { get; set; }
+
+
+        [ValidateNever]
+        public string? ImagePath { get; set; }
+
+        [Required(ErrorMessage = "Kategori seçiniz")]
+        public int CategoryId { get; set; }
+
+
+        public string? CategoryName { get; set; }
+
+
     }
 }

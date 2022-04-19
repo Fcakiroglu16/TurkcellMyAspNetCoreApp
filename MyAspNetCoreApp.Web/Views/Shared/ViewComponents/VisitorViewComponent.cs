@@ -27,5 +27,8 @@ namespace MyAspNetCoreApp.Web.Views.Shared.ViewComponents
             ViewBag.visitorViewModels = visitorViewModels;
             return View();
         }
+
+
+       
     }
 }

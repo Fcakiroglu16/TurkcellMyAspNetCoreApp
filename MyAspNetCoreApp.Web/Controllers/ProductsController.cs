@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MyAspNetCoreApp.Web.Filters;
 using MyAspNetCoreApp.Web.Helpers;
 using MyAspNetCoreApp.Web.Models;
@@ -14,11 +16,12 @@ namespace MyAspNetCoreApp.Web.Controllers
     {
 
         private AppDbContext _context;
+        private readonly IFileProvider _fileProvider;
 
 
         private readonly IMapper _mapper;
         private readonly ProductRepository _productRepository;
-        public ProductsController(AppDbContext context, IMapper mapper)
+        public ProductsController(AppDbContext context, IMapper mapper, IFileProvider fileProvider)
         {
 
 
@@ -26,16 +29,31 @@ namespace MyAspNetCoreApp.Web.Controllers
 
             _context = context;
             _mapper = mapper;
+            _fileProvider = fileProvider;
         }
 
-      [CacheResourceFilter]
+        //[CacheResourceFilter]
         public IActionResult Index()
         {
 
-        
+            List<ProductViewModel> products = _context.Products.Include(x => x.Category).Select(x => new ProductViewModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price,
+                Stock = x.Stock,
+                CategoryName = x.Category.Name,
+                Color = x.Color,
+                Description = x.Description,
+                Expire = x.Expire,
+                ImagePath = x.ImagePath,
+                IsPublish = x.IsPublish,
+                PublishDate = x.PublishDate
 
-            var products = _context.Products.ToList();
-            return View(_mapper.Map<List<ProductViewModel>>(products));
+            }).ToList();
+
+           
+            return View(products);
         }
 
 
@@ -110,19 +128,81 @@ namespace MyAspNetCoreApp.Web.Controllers
             }, "Value", "Data");
 
 
+            var categories = _context.Category.ToList();
+
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
+
+
+
+
+
 
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(ProductViewModel newProduct)
+        public  IActionResult Add(ProductViewModel newProduct)
         {
+            IActionResult result = null;
+            
 
-            //if (!string.IsNullOrEmpty(newProduct.Name) && newProduct.Name.StartsWith("A"))
-            //{
-            //    ModelState.AddModelError(String.Empty, "Ürün ismi A harfi başlayamaz");
-            //}
+
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var product = _mapper.Map<Product>(newProduct);
+                    if (newProduct.Image!=null && newProduct.Image.Length>0)
+                    {
+                        var root = _fileProvider.GetDirectoryContents("wwwroot");
+
+                        var images = root.First(x => x.Name == "images");
+
+
+                        var randomImageName = Guid.NewGuid() + Path.GetExtension(newProduct.Image.FileName);
+
+
+                        var path = Path.Combine(images.PhysicalPath, randomImageName);
+
+
+                        using var stream = new FileStream(path, FileMode.Create);
+
+
+                        newProduct.Image.CopyTo(stream);
+                      
+                        product.ImagePath = randomImageName;
+                    }
+                   
+
+
+                   
+
+
+
+                    _context.Products.Add(product);
+                    _context.SaveChanges();
+
+                    TempData["status"] = "Ürün başarıyla eklendi.";
+                  return RedirectToAction("Index");
+
+                }
+                catch (Exception)
+                {
+                   
+                    result= View();
+                }
+            }
+            else
+            {
+                result= View();
+            }
+
+            var categories = _context.Category.ToList();
+
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
+
 
             ViewBag.Expire = new Dictionary<string, int>()
             {
@@ -141,42 +221,9 @@ namespace MyAspNetCoreApp.Web.Controllers
 
             }, "Value", "Data");
 
-
-            if (ModelState.IsValid)
-            {
-
-                try
-                {
-                  
-                    _context.Products.Add(_mapper.Map<Product>(newProduct));
-                    _context.SaveChanges();
-
-                    TempData["status"] = "Ürün başarıyla eklendi.";
-                    return RedirectToAction("Index");
-
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError(String.Empty, "Ürün kaydedilirken bir hata meydana geldi. Lütfen daha sonra tekrar deneyiniz.");
+            return result;
 
 
-                        return View();
-                }
-              
-
-
-            }
-            else
-            {
-
-                return View();
-
-
-            }
-
-
-
-          
         }
 
 
@@ -186,10 +233,12 @@ namespace MyAspNetCoreApp.Web.Controllers
         {
 
             var product = _context.Products.Find(id);
+            var categories = _context.Category.ToList();
+
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name",product.CategoryId);
 
 
 
-          
 
             ViewBag.ExpireValue = product.Expire;
             ViewBag.Expire = new Dictionary<string, int>()
@@ -222,11 +271,11 @@ namespace MyAspNetCoreApp.Web.Controllers
 
 
 
-            return View(_mapper.Map<ProductViewModel>(product));
+            return View(_mapper.Map<ProductUpdateViewModel>(product));
         }
 
         [HttpPost]
-        public IActionResult Update(ProductViewModel updateProduct)
+        public IActionResult Update(ProductUpdateViewModel updateProduct)
         {
 
           
@@ -251,10 +300,54 @@ namespace MyAspNetCoreApp.Web.Controllers
 
             }, "Value", "Data", updateProduct.Color);
 
+
+
+                var categories = _context.Category.ToList();
+
+                ViewBag.categorySelect = new SelectList(categories, "Id", "Name",updateProduct.CategoryId);
+
+
                 return View();
             }
-           
-            _context.Products.Update(_mapper.Map<Product>(updateProduct));
+
+
+            if (updateProduct.Image != null && updateProduct.Image.Length > 0)
+            {
+                var root = _fileProvider.GetDirectoryContents("wwwroot");
+
+                var images = root.First(x => x.Name == "images");
+
+
+                var randomImageName = Guid.NewGuid() + Path.GetExtension(updateProduct.Image.FileName);
+
+
+                var path = Path.Combine(images.PhysicalPath, randomImageName);
+
+
+                using var stream = new FileStream(path, FileMode.Create);
+
+
+                updateProduct.Image.CopyTo(stream);
+
+                updateProduct.ImagePath = randomImageName;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            var product = _mapper.Map<Product>(updateProduct);
+
+
+
+            _context.Products.Update(product);
             _context.SaveChanges();
             TempData["status"] = "Ürün başarıyla güncellendi.";
             return RedirectToAction("Index");

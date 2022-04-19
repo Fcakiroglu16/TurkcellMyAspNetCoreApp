@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@section Scripts
+{
+    <script type="text/javascript">
+
+$(document).ready(function(){
+
+           function loadComments()
+        {
+
+             $("#loading").show();
+
+ $.ajax({
+            type:"GET",
+            url:"/VisitorAjax/VisitorCommentList",
+            success:function(data){
+            console.log(data);
+             $("#comments").html("");
+                $.each(data,function(index,item){
+
+
+                    let comment= `<div class="card mt-3" >
+                                <div class="card-body">
+                                    <h5 class="card-title">${item.name}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">${item.date}</h6>
+                                    <p class="card-text">${item.comment}</p></div></div>`;
+
+                        $("#comments").append(comment);
+
+                     
+
+                    });
+              $("#loading").hide();
+            },
+            error:function(e){
+            
+            console.log(e);
+            }
+
+        })
+        }
+
+
+loadComments();
+
+    $("#btnSave").click(function(){
+
+
+
+
+ 
+
+
+
+
+        var name= $("#Name").val();
+
+
+        var comment=$("#Comment").val();
+
+
+        var jsonData={ "name":name,"comment":comment};
+
+        $.ajax({
+            type:"POST",
+            url:"/VisitorAjax/SaveVisitorComment",
+            data:jsonData,
+            success:function(data){
+            alert("yorum kaydedildi");
+
+            loadComments();
+            
+            },
+            error:function(e){
+            
+            console.log(e);
+            }
+
+
+
+
+
+        })
+
+
+
+
+
+
+
+
+    })
+
+
+})
+
+
+    </script>
+
+}
+
+
+
+
+  <div class="mb-3">
+    <label for="Name" class="form-label">İsim</label>
+    <input  class="form-control" id="Name" name="Name">
+
+  </div>
+
+  <div class="form-floating mb-3">
+  <textarea id="Comment" name="Comment" class="form-control" placeholder="Yorum" style="height: 100px"></textarea>
+  <label for="Comment"  >Yorum</label>
+   </div>
+
+
+ 
+
+
+  <button id="btnSave" type="button" class="btn btn-primary">Kaydet</button>
+ 
+  <div id="loading">
+ <div  class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+</div>
+  <div id="comments">
+
+
+</div>
+
